@@ -2,7 +2,7 @@
 
 SUBDIRS = linux
 
-sbin_PROGRAMS = iwconfig
+sbin_PROGRAMS = iwconfig iwlist
 
 iwconfig_SOURCES = \
 	iwconfig.c \
@@ -10,3 +10,11 @@ iwconfig_SOURCES = \
 	iwlib.h \
 	mach-ioctl.c \
 	wireless.h
+
+iwlist_SOURCES = \
+	iwlist.c \
+	iwlib.c \
+	iwlib.h \
+	mach-ioctl.c \
+	wireless.h
+
