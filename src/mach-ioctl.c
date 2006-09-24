@@ -140,7 +140,7 @@ iw_get_ext(int skfd, char *ifname, int req, struct iwreq *data)
     {
       /* ioctls which require an iw_point structure. we don't use
        * the user space pointer approach as linux does, but send the
-       * data just along with device_set_status ... */
+       * data just along with device_get_status ... */
       struct iw_point *iwp = &data->u.data;
 
       int buflen = sizeof(* data) + iwp->length;
@@ -155,9 +155,6 @@ iw_get_ext(int skfd, char *ifname, int req, struct iwreq *data)
 	  goto out;
 	}
 
-      memcpy(buf, data, sizeof(* data));
-      memcpy(buf + sizeof(* data), iwp->pointer, iwp->length);
-
       unsigned int bufsz = buflen / sizeof(natural_t);
       err = device_get_status(device, req, (dev_status_t) buf, &bufsz);
       
@@ -165,7 +162,7 @@ iw_get_ext(int skfd, char *ifname, int req, struct iwreq *data)
 	{
 	  void *ptr = iwp->pointer;
 	  memcpy(data, buf, sizeof(* data));
-	  iwp->pointer = ptr;
+	  iwp->pointer = ptr;	/* restore the pointer, we just overwrote */
 
 	  memcpy(iwp->pointer, buf + sizeof(* data), iwp->length);
 	}
